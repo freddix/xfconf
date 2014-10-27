@@ -3,7 +3,7 @@
 Summary:	Xfce configuration manager
 Name:		xfconf
 Version:	4.10.0
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		X11/Applications
 Source0:	http://archive.xfce.org/src/xfce/xfconf/4.10/%{name}-%{version}.tar.bz2
@@ -52,6 +52,8 @@ xfconf API documentation.
 
 %prep
 %setup -q
+%{__sed} -i -e 's|docs \\|docs|' \
+	-i -e '/tests/d' Makefile.am
 
 %build
 %{__libtoolize}
@@ -74,7 +76,8 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/xdg/xfce4/xfconf/xfce-perchannel-xml
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/ur_PK
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/locale/ur_PK
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %find_lang %{name}
 
